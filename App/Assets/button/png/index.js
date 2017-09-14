@@ -1,0 +1,18 @@
+export default {
+  '0': require('./0.png'),
+  '1+2+3+4': require('./1+2+3+4.png'),
+  '1+2+3': require('./1+2+3.png'),
+  '1+2+4': require('./1+2+4.png'),
+  '1+2': require('./1+2.png'),
+  '1+3+4': require('./1+3+4.png'),
+  '1+3': require('./1+3.png'),
+  '1+4': require('./1+4.png'),
+  '1': require('./1.png'),
+  '2+3+4': require('./2+3+4.png'),
+  '2+3': require('./2+3.png'),
+  '2+4': require('./2+4.png'),
+  '2': require('./2.png'),
+  '3+4': require('./3+4.png'),
+  '3': require('./3.png'),
+  '4': require('./4.png'),
+}
