@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
-import { generateButtonString } from '../Assets/generators'
+import { generateButtonString } from '../../Assets/generators'
 
 const colorWhite = {
   color: 'white',
@@ -53,11 +53,10 @@ const style = {
   moveSpeed: {
     textAlign: 'center',
     flex: 1,
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderRightWidth: 0,
-    borderBottomLeftRadius: 10,
     ...colorWhite,
+  },
+  content: {
+    marginBottom: 5,
   }
 };
 
@@ -99,19 +98,9 @@ const MoveCard = ({ move }) => {
           <Text style={style.triangleTopLeft}>{''}</Text>
         </View>
         <Text style={style.moveName}>{name}</Text>
-        <Text style={style.moveSpeed}>{`${speed}F`}</Text>
       </Row>
-      <Content>
-        <Text style={style.text}>{`BLK: ${onBlk}`}</Text>
-        <Text style={style.text}>{`HIT: ${onHit}`}</Text>
-        <Text style={style.text}>{`CH: ${onCh}`}</Text>
-      </Content>
-      <Content>
+      <Content rowStyle={style.content}>
         { generateButtonString(notation) }
-      </Content>
-      <Content>
-        <Text style={style.text}>{ hitLevel }</Text>
-        <Text style={style.text}>{ damage }</Text>
       </Content>
     </View>
   );

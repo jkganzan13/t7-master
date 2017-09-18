@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import NavigationBar from 'react-native-navbar';
-import { ScrollView, View, TouchableWithoutFeedback, Text, KeyboardAvoidingView } from 'react-native'
+import NavigationBar from 'react-native-navbar'
+import { ScrollView, TouchableWithoutFeedback } from 'react-native'
+import AppActions from '../Redux/AppRedux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux'
-import MoveCard from '../Components/MoveCard'
+import MoveList from '../Components/Moves/MoveList'
 import R from 'ramda'
+import Drawer from 'react-native-drawer'
+import FilterSidebar from '../Components/Filters/FilterSidebar';
 
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
@@ -13,13 +16,18 @@ import R from 'ramda'
 import styles from './Styles/MoveListScreenStyle'
 import characters from "../Assets/data";
 
-const FilterBtn = (
-  <TouchableWithoutFeedback onPress={() => console.log('filter clicked')} >
-    <Icon name="filter" size={30} style={{ alignSelf: 'center', marginRight: 8 }} color="white" />
-  </TouchableWithoutFeedback>
-);
+
 
 class MoveListScreen extends Component {
+  constructor(props){
+    super(props);
+    this.toggleRightSidebar = this.toggleRightSidebar.bind(this);
+  }
+
+  toggleRightSidebar() {
+    this._drawer.toggle()
+  }
+
   render () {
     const character = R.find(R.propEq('number', this.props.character))(characters);
     if(!character) return null;
@@ -38,8 +46,24 @@ class MoveListScreen extends Component {
     const movesFromCommandList = R.reject(m => R.isNil(m.number), character.moves);
     const moves = R.sortBy(R.prop('number'))(movesFromCommandList);
 
+
+    const FilterBtn = (
+      <TouchableWithoutFeedback onPress={this.toggleRightSidebar} >
+        <Icon name="filter" size={30} style={{ alignSelf: 'center', marginRight: 8 }} color="white" />
+      </TouchableWithoutFeedback>
+    );
+
     return (
-      <View style={styles.container}>
+      <Drawer
+        content={<FilterSidebar filters={this.props.filters} onFilterCheck={this.props.setMoveFilter} />}
+        tapToClose={true}
+        side={'right'}
+        ref={(ref) => this._drawer = ref}
+        acceptPan={false}
+        type={'overlay'}
+        openDrawerOffset={0.2}
+        closedDrawerOffset={-3}
+      >
         <NavigationBar
           leftButton={leftButtonConfig}
           rightButton={FilterBtn}
@@ -47,30 +71,23 @@ class MoveListScreen extends Component {
           containerStyle={styles.navStyle}
         />
         <ScrollView style={styles.scrollView}>
-          <KeyboardAvoidingView behavior='position'>
-            {
-              moves.map((move, i) => (
-                <MoveCard
-                  key={i}
-                  move={move}
-                />
-              ))
-            }
-          </KeyboardAvoidingView>
+          <MoveList moves={moves} />
         </ScrollView>
-      </View>
+      </Drawer>
     )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    character: state.app.character
+    character: state.app.character,
+    filters: state.app.filters,
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setMoveFilter: (filter, checked) => dispatch(AppActions.setMoveFilter(filter, checked))
   }
 };
 
