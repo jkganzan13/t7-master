@@ -6,7 +6,7 @@ import { getFilters } from '../../Constants/filters'
 
 const styles = {
   flex: 1,
-  backgroundColor: 'brown'
+  backgroundColor: 'lightgrey',
 };
 
 const FilterSidebar = ({ filters, onFilterCheck }) => {
